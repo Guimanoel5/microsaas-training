@@ -1,0 +1,89 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  background: #2f80ed;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+table {
+  width: 90%;
+  margin: 30px auto;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+th,
+td {
+  padding: 14px;
+  text-align: left;
+}
+
+th {
+  background: #fafafa;
+}
+
+tr:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.hidden {
+  display: none;
+}
+/* Adicione isso ao seu style.css */
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaçamento entre inputs */
+}
+
+.modal-content input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+#closeModal {
+  background: #eb5757; /* Vermelho para cancelar */
+  margin-top: 5px;
+}

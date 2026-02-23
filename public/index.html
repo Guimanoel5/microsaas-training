@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MicroSaaS - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-blue-50 flex h-screen overflow-hidden font-sans">
+    <aside
+      class="w-64 bg-blue-900 text-white flex flex-col p-4 hidden md:flex shrink-0"
+    >
+      <div class="flex items-center gap-2 mb-10 px-2">
+        <div class="bg-blue-500 p-1 rounded-full">
+          <i class="fas fa-microchip"></i>
+        </div>
+        <span class="font-bold text-xl uppercase tracking-wider text-white"
+          >MicroSaaS</span
+        >
+      </div>
+
+      <nav class="flex-1 space-y-1">
+        <p
+          class="text-blue-300 text-xs font-semibold mb-2 px-2 uppercase tracking-widest"
+        >
+          Menu
+        </p>
+        <a
+          href="#"
+          id="link-ideias"
+          class="flex items-center gap-3 p-2 bg-blue-700 rounded-lg text-sm text-white transition-all"
+        >
+          <i class="fas fa-lightbulb w-5"></i> Ideias e Feedbacks
+        </a>
+        <a
+          href="#"
+          id="link-users"
+          class="flex items-center gap-3 p-2 hover:bg-blue-700 rounded-lg text-sm text-blue-200 transition-all"
+        >
+          <i class="fas fa-users w-5"></i> Usuários
+        </a>
+      </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <header
+        class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-10 shadow-sm"
+      >
+        <div class="relative w-1/3">
+          <i class="fas fa-search absolute left-3 top-3 text-blue-400"></i>
+          <input
+            type="text"
+            placeholder="Pesquisar..."
+            class="pl-10 pr-4 py-2 bg-blue-50 rounded-full w-full text-sm outline-none border border-blue-200 focus:border-blue-500 transition-all"
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            id="openCreateUserModalBtn"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md flex items-center gap-2"
+          >
+            <i class="fas fa-plus"></i> Novo Usuário
+          </button>
+          <div
+            class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold"
+          >
+            GU
+          </div>
+        </div>
+      </header>
+
+      <div class="flex-1 overflow-y-auto p-6">
+        <section
+          id="content-ideias"
+          class="max-w-4xl mx-auto w-full block animate-in fade-in duration-300"
+        >
+          <div class="flex justify-between items-end mb-6">
+            <h2 class="text-2xl font-bold text-blue-800">
+              📝 Ideias e Feedbacks
+            </h2>
+            <span
+              class="text-blue-500 text-sm italic cursor-pointer hover:text-blue-700"
+            >
+              Mais recente <i class="fas fa-chevron-down ml-1"></i>
+            </span>
+          </div>
+
+          <div
+            class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm flex items-center gap-4 mb-8"
+          >
+            <div
+              class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
+            >
+              GU
+            </div>
+            <input
+              type="text"
+              placeholder="Criar uma publicação..."
+              class="flex-1 outline-none text-blue-600 bg-transparent placeholder-blue-300"
+            />
+            <button class="text-blue-400 hover:text-blue-600 transition-colors">
+              <i class="fas fa-paper-plane text-xl"></i>
+            </button>
+          </div>
+          <div
+            class="text-blue-300 text-center py-20 border-2 border-dashed border-blue-100 rounded-2xl bg-white/50"
+          >
+            <i class="fas fa-inbox text-4xl mb-3 block"></i>
+            Conteúdo de Ideias e Feedbacks virá aqui!
+          </div>
+        </section>
+
+        <section
+          id="content-users"
+          class="max-w-6xl mx-auto w-full hidden animate-in fade-in duration-300"
+        >
+          <div class="flex justify-between items-end mb-6">
+            <h2 class="text-2xl font-bold text-blue-800">
+              👥 Gestão de Usuários
+            </h2>
+            <button
+              id="refreshUsersBtn"
+              class="bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-100 transition-all flex items-center gap-2"
+            >
+              <i class="fas fa-sync-alt"></i> Atualizar
+            </button>
+          </div>
+
+          <div
+            class="bg-white rounded-xl border border-blue-100 shadow-sm overflow-hidden"
+          >
+            <table class="w-full text-left">
+              <thead
+                class="bg-blue-50 border-b border-blue-200 text-blue-600 text-xs uppercase tracking-wider"
+              >
+                <tr>
+                  <th class="p-4 font-bold">ID</th>
+                  <th class="p-4 font-bold">Nome</th>
+                  <th class="p-4 font-bold">E-mail</th>
+                  <th class="p-4 font-bold text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="userTable" class="divide-y divide-blue-50"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div
+      id="userModal"
+      class="fixed inset-0 bg-black/60 items-center justify-center flex hidden z-50 p-4 backdrop-blur-sm"
+    >
+      <div
+        id="userModalContent"
+        class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl scale-100 transition-all"
+      >
+        <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-blue-800">
+          Criar Novo Usuário
+        </h2>
+
+        <form id="userForm" class="space-y-4">
+          <input type="hidden" id="userId" />
+
+          <div>
+            <label
+              for="name"
+              class="block text-xs font-bold text-blue-500 uppercase mb-1"
+              >Nome Completo</label
+            >
+            <input
+              type="text"
+              id="name"
+              required
+              class="w-full p-3 bg-blue-50 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none text-blue-800"
+            />
+          </div>
+
+          <div>
+            <label
+              for="email"
+              class="block text-xs font-bold text-blue-500 uppercase mb-1"
+              >E-mail Profissional</label
+            >
+            <input
+              type="email"
+              id="email"
+              required
+              class="w-full p-3 bg-blue-50 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none text-blue-800"
+            />
+          </div>
+
+          <div>
+            <label
+              for="password"
+              class="block text-xs font-bold text-blue-500 uppercase mb-1"
+            >
+              Senha
+              <span
+                id="passwordHint"
+                class="text-xs text-blue-400 font-normal hidden"
+                >(Vazio para manter atual)</span
+              >
+            </label>
+            <input
+              type="password"
+              id="password"
+              class="w-full p-3 bg-blue-50 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none text-blue-800"
+            />
+          </div>
+
+          <div class="flex gap-3 pt-6">
+            <button
+              type="button"
+              id="closeUserModalBtn"
+              class="flex-1 py-3 text-blue-600 font-semibold hover:bg-blue-100 rounded-lg transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onclick="handleSaveUser(event)"
+              class="flex-1 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all"
+            >
+              Salvar Usuário
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="confirmModal"
+      class="fixed inset-0 bg-black/60 items-center justify-center flex hidden z-[60] p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl text-center"
+      >
+        <div
+          class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"
+        >
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2 class="text-xl font-bold text-blue-900 mb-2">Tem certeza?</h2>
+        <p id="confirmMessage" class="text-blue-600 mb-6 text-sm">
+          Esta ação não pode ser desfeita.
+        </p>
+        <div class="flex gap-3">
+          <button
+            id="cancelConfirmBtn"
+            class="flex-1 py-2 text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition border border-blue-100"
+          >
+            Cancelar
+          </button>
+          <button
+            id="okConfirmBtn"
+            class="flex-1 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
+          >
+            Sim, excluir
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="notificationPopUp"
+      class="fixed top-5 right-5 flex items-center p-4 w-full max-w-xs bg-white rounded-xl shadow-2xl border-l-4 border-blue-600 transform translate-x-[150%] transition-all duration-500 z-[100]"
+    >
+      <div
+        id="notificationIcon"
+        class="inline-flex shrink-0 justify-center items-center w-8 h-8 text-blue-500 bg-blue-100 rounded-lg"
+      >
+        <i class="fas fa-info-circle"></i>
+      </div>
+      <div id="notificationText" class="ms-3 text-sm font-medium text-blue-700">
+        Mensagem do sistema
+      </div>
+      <button
+        id="closeNotification"
+        onclick="this.parentElement.classList.add('translate-x-[150%]')"
+        class="ms-auto text-blue-400 hover:text-blue-900 p-1.5"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <script src="/js/script.js"></script>
+  </body>
+</html>
