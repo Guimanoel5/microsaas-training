@@ -4,27 +4,57 @@ const cors = require("cors");
 const helmet = require("helmet");
 require("dotenv").config();
 
+const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
-// ... imports
 const app = express();
+
+// ==============================
+// Middlewares
+// ==============================
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors());
 app.use(express.json());
 
-// 1. Serve arquivos estáticos primeiro
-app.use(express.static(path.join(__dirname, "../public")));
+// ==============================
+// Static Files (apenas públicos)
+// ==============================
 
-// 2. Rotas da API
+app.use(
+  express.static(path.join(__dirname, "../public"), {
+    index: false
+  })
+);
+
+// ==============================
+// API Routes
+// ==============================
+
+app.use("/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
-// 3. Rota coringa para o Frontend (CORRIGIDA)
-// Substitua a linha 24 por esta:
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+// ==============================
+// Dashboard (PROTEÇÃO FRONTEND)
+// ==============================
+
+app.get("/index.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "./views/index.html"));
 });
 
+// ==============================
+// Default Route → Login
+// ==============================
+
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "../public/login.html"));
+});
+
+// ==============================
+// Error Handler
+// ==============================
+
 app.use(errorHandler);
+
 module.exports = app;

@@ -1,7 +1,7 @@
 const pool = require("../config/database"); // Assuma que você exporta o pool do pg
 
-// Helper para hash de senha (instale bcryptjs: npm install bcryptjs)
-const bcrypt = require("bcryptjs");
+// Helper para hash de senha (instale bcrypt: npm install bcrypt)
+const bcrypt = require("bcrypt");
 
 // Criar um novo usuário
 exports.createUser = async (req, res, next) => {
