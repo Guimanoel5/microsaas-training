@@ -18,20 +18,18 @@ window.showSection = function(section) {
     if (section === 'users') {
         contentIdeias.classList.add("hidden");
         contentUsers.classList.remove("hidden");
-        // Estilo ativo na sidebar
         linkUsers.classList.add("bg-blue-700", "text-white");
         linkIdeias.classList.remove("bg-blue-700", "text-white");
         window.loadUsers();
     } else {
         contentUsers.classList.add("hidden");
         contentIdeias.classList.remove("hidden");
-        // Estilo ativo na sidebar
         linkIdeias.classList.add("bg-blue-700", "text-white");
         linkUsers.classList.remove("bg-blue-700", "text-white");
     }
 };
 
-// Carregar Usuários - Modificado para remover a coluna de ID
+// Carregar Usuários - Remove a coluna de ID visualmente
 window.loadUsers = async function() {
     try {
         const res = await fetch("/api/users");
@@ -49,10 +47,13 @@ window.loadUsers = async function() {
                     </td>
                 </tr>`;
         });
-    } catch (err) { console.error(err); }
+    } catch (err) { 
+        console.error(err);
+        showAlert("Erro ao conectar com o banco de dados", "error");
+    }
 };
 
-// Salvar Usuário (Criação ou Edição)
+// Salvar Usuário (Update ou Create)
 window.handleSaveUser = async function(event) {
     if (event) event.preventDefault();
     
@@ -76,7 +77,7 @@ window.handleSaveUser = async function(event) {
         });
 
         if (res.ok) {
-            showAlert(isUpdate ? "Atualizado!" : "Criado!");
+            showAlert(isUpdate ? "Usuário atualizado com sucesso!" : "Usuário criado com sucesso!");
             document.getElementById("userModal").classList.add("hidden");
             document.getElementById("userForm").reset();
             loadUsers();
@@ -103,14 +104,28 @@ window.editUser = async function(id) {
 
 // Deletar Usuário
 window.deleteUser = function(id) {
-    if(confirm("Deseja excluir?")) {
-        fetch(`/api/users/${id}`, { method: "DELETE" }).then(() => loadUsers());
+    if(confirm("Deseja realmente excluir este usuário?")) {
+        fetch(`/api/users/${id}`, { method: "DELETE" })
+            .then(() => {
+                showAlert("Usuário removido");
+                loadUsers();
+            })
+            .catch(() => showAlert("Erro ao excluir", "error"));
     }
 };
 
 // Inicialização de Eventos
 document.addEventListener("DOMContentLoaded", () => {
-    // Eventos de clique para navegação
+    // Ação do Botão Atualizar
+    const refreshBtn = document.getElementById("refreshUsersBtn");
+    if (refreshBtn) {
+        refreshBtn.onclick = () => {
+            window.loadUsers();
+            showAlert("Dados sincronizados com o banco!");
+        };
+    }
+
+    // Navegação Sidebar
     document.getElementById("link-users").onclick = (e) => {
         e.preventDefault();
         showSection('users');
@@ -121,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showSection('ideias');
     };
 
-    // Botão abrir modal novo usuário
+    // Modal Create
     document.getElementById("openCreateUserModalBtn").onclick = () => {
         document.getElementById("modalTitle").textContent = "Criar Usuário";
         document.getElementById("userId").value = "";
@@ -130,7 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("userModal").classList.add("flex");
     };
 
-    // Fechar modal
     document.getElementById("closeUserModalBtn").onclick = () => {
         document.getElementById("userModal").classList.add("hidden");
     };
