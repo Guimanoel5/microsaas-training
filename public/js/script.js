@@ -8,7 +8,7 @@ window.showAlert = function(message, type = 'success') {
     setTimeout(() => pop.classList.add('translate-x-[150%]'), 3500);
 };
 
-// --- NOVA FUNÇÃO DE NAVEGAÇÃO ---
+// Navegação entre seções
 window.showSection = function(section) {
     const contentIdeias = document.getElementById("content-ideias");
     const contentUsers = document.getElementById("content-users");
@@ -31,7 +31,7 @@ window.showSection = function(section) {
     }
 };
 
-// Carregar Usuários
+// Carregar Usuários - Modificado para remover a coluna de ID
 window.loadUsers = async function() {
     try {
         const res = await fetch("/api/users");
@@ -41,7 +41,6 @@ window.loadUsers = async function() {
         users.forEach(user => {
             table.innerHTML += `
                 <tr class="border-b border-blue-100 hover:bg-blue-50 transition">
-                    <td class="p-4 text-sm text-blue-700 font-medium">${user.id}</td>
                     <td class="p-4 text-blue-800 font-medium">${user.name}</td>
                     <td class="p-4 text-blue-500 text-sm">${user.email}</td>
                     <td class="p-4 text-center">
@@ -53,7 +52,7 @@ window.loadUsers = async function() {
     } catch (err) { console.error(err); }
 };
 
-// FUNÇÃO QUE SALVA
+// Salvar Usuário (Criação ou Edição)
 window.handleSaveUser = async function(event) {
     if (event) event.preventDefault();
     
@@ -90,6 +89,7 @@ window.handleSaveUser = async function(event) {
     }
 };
 
+// Editar Usuário
 window.editUser = async function(id) {
     const res = await fetch(`/api/users/${id}`);
     const user = await res.json();
@@ -101,13 +101,14 @@ window.editUser = async function(id) {
     document.getElementById("userModal").classList.add("flex");
 };
 
+// Deletar Usuário
 window.deleteUser = function(id) {
     if(confirm("Deseja excluir?")) {
         fetch(`/api/users/${id}`, { method: "DELETE" }).then(() => loadUsers());
     }
 };
 
-// Inicialização
+// Inicialização de Eventos
 document.addEventListener("DOMContentLoaded", () => {
     // Eventos de clique para navegação
     document.getElementById("link-users").onclick = (e) => {
@@ -120,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showSection('ideias');
     };
 
-    // Botão abrir modal
+    // Botão abrir modal novo usuário
     document.getElementById("openCreateUserModalBtn").onclick = () => {
         document.getElementById("modalTitle").textContent = "Criar Usuário";
         document.getElementById("userId").value = "";
@@ -129,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("userModal").classList.add("flex");
     };
 
+    // Fechar modal
     document.getElementById("closeUserModalBtn").onclick = () => {
         document.getElementById("userModal").classList.add("hidden");
     };
